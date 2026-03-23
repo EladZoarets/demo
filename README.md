@@ -23,7 +23,7 @@ This framework is built on three pillars:
 ## 🚀 Deployment
 1. Clone this repo into your `.cursor` folder.
 2. Update `project-context.md` with your stack.
-3. Run `@orchestrate [feature]` and watch the machine work.
+3. Run `/orchestrate [feature]` and watch the machine work.
 
 ---
 *Developed for Senior Engineering Managers and AI Guild Leads.*
