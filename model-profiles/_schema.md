@@ -22,9 +22,8 @@ syntax. The orchestrator substitutes placeholders at prompt-assembly time.
 
 ## Adding a New Profile
 
-1. Copy `default.md` to `<model-id>.md` in `.cursor/model-profiles/`.
+1. Copy `default.md` to `<model-id>.md` in `model-profiles/`.
 2. Update field values for the new model.
 3. Add an entry to `_registry.md`: `<model-id>: <filename>`.
-4. Mirror both files to `.agents/model-profiles/`.
-5. Run `node scripts/resolve-profiles.js --dry-run` to validate.
-6. Update agent frontmatters to reference the new model ID where appropriate.
+4. Run `node scripts/resolve-profiles.js --dry-run` to validate.
+5. Update agent frontmatters to reference the new model ID where appropriate.

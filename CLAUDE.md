@@ -58,7 +58,7 @@ Commands live in `.claude/commands/`.
 
 ## Model Profile System
 
-Model profiles live in `.cursor/model-profiles/`. Each agent declares
+Model profiles live in `model-profiles/`. Each agent declares
 `preferred_model` in its frontmatter. The resolve script maps model IDs
 to profile files via `_registry.md` and writes per-agent rules to
 `resolved-context.md`.

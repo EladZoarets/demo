@@ -155,21 +155,21 @@ CLAUDE.md                       # Claude Code entry point — auto-loaded on ses
   agents/                       # Agent definitions
   commands/                     # Slash commands
   templates/                    # Plan, score, chaos, and review templates
-  model-profiles/               # Model profile files
-    _registry.md                # model-id → profile-filename map
-    _schema.md                  # Profile field definitions
-    claude.md                   # Base Claude profile
-    claude-opus.md              # Extends claude.md
-    claude-sonnet.md            # Extends claude.md
-    claude-haiku.md             # Extends claude.md
-    gpt-5.5.md                  # Standalone
-    gemini.md                   # Standalone
-    default.md                  # Safe fallback for unknown models
   project-context.md            # Your stack (Cursor reads this)
 
 .agents/                        # Amp
   skills/                       # Skill definitions (sdlc-architect, sdlc-chaos, …)
-  model-profiles/               # Mirror of .cursor/model-profiles/
+
+model-profiles/                 # Shared across all platforms
+  _registry.md                  # model-id → profile-filename map
+  _schema.md                    # Profile field definitions
+  claude.md                     # Base Claude profile
+  claude-opus.md                # Extends claude.md
+  claude-sonnet.md              # Extends claude.md
+  claude-haiku.md               # Extends claude.md
+  gpt-5.5.md                    # Standalone
+  gemini.md                     # Standalone
+  default.md                    # Safe fallback for unknown models
 
 scripts/
   resolve-profiles.js           # Profile resolver (Node.js, zero dependencies)
