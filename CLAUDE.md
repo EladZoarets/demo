@@ -32,7 +32,7 @@ Before any pipeline phase, load model profiles:
 
 3. **Extract per-agent rules** from `resolved-context.md`:
    For each `[agent: {name} | model: {id}]` block, store:
-   - `model_id` → pass as the `model` parameter when spawning the sub-agent
+   - `model_id` → pass as the `model` parameter when spawning the sub-agent **only if the value is not `none`**; if it is `none`, omit the `model` parameter entirely and let Claude Code choose
    - rules block text → inject into `{MODEL_RULES_INJECTED_BY_ORCHESTRATOR}` placeholder in the agent's prompt
    - `plan_format` / `score_format` / `chaos_format` / `review_format` → use when assembling phase output
 
@@ -58,10 +58,15 @@ Commands live in `.claude/commands/`.
 
 ## Model Profile System
 
-Model profiles live in `model-profiles/`. Each agent declares
-`preferred_model` in its frontmatter. The resolve script maps model IDs
-to profile files via `_registry.md` and writes per-agent rules to
-`resolved-context.md`.
+Model profiles live in `model-profiles/`. Agent model assignments are declared
+in `model-profiles/agents.md` — one line per agent, platform-neutral. The
+resolve script maps each agent's model to a profile file via `_registry.md`
+and writes per-agent rules to `resolved-context.md`.
 
+Setting a model is optional. Leave the value blank in `agents.md` and the
+orchestrator will **not** pass a `model` parameter when spawning that agent,
+letting the platform pick the model.
+
+To change an agent's model: edit `model-profiles/agents.md`.
 To add a new model: add one line to `_registry.md` and one profile file.
 No changes to agents, commands, or templates required.

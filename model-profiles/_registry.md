@@ -4,6 +4,9 @@
 # Unknown model IDs fall back to default.md automatically.
 ---
 
+opus: claude-opus.md
+sonnet: claude-sonnet.md
+haiku: claude-haiku.md
 claude-opus-4-6: claude-opus.md
 claude-opus-4-7: claude-opus.md
 claude-sonnet-4-6: claude-sonnet.md

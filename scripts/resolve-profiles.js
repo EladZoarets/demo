@@ -5,9 +5,8 @@ const fs   = require('fs');
 const path = require('path');
 
 const ROOT          = process.cwd();
-const CURSOR_AGENTS = path.join(ROOT, '.cursor/agents');
-const AMP_AGENTS    = path.join(ROOT, '.agents/skills');
 const PROFILES_DIR  = path.join(ROOT, 'model-profiles');
+const AGENTS_FILE   = path.join(PROFILES_DIR, 'agents.md');
 const REGISTRY_FILE = path.join(PROFILES_DIR, '_registry.md');
 const OUTPUT_FILE   = path.join(ROOT, 'resolved-context.md');
 const DRY_RUN       = process.argv.includes('--dry-run');
@@ -80,43 +79,29 @@ function loadProfile(filename, visited = new Set()) {
   return fields;
 }
 
-// ── Agent collector (both surfaces, de-duplicated) ───────────────────────────
+// ── Agent collector ───────────────────────────────────────────────────────────
 
 function collectAgents() {
-  const agents = [];
-
-  if (fs.existsSync(CURSOR_AGENTS)) {
-    for (const file of fs.readdirSync(CURSOR_AGENTS).sort()) {
-      if (!file.endsWith('.md')) continue;
-      const content = fs.readFileSync(path.join(CURSOR_AGENTS, file), 'utf8');
-      const fm      = parseFrontmatter(content);
-      agents.push({ name: fm.name || path.basename(file, '.md'), preferred_model: fm.preferred_model || null });
-    }
+  const content = fs.readFileSync(AGENTS_FILE, 'utf8');
+  const agents  = [];
+  for (const line of content.split('\n')) {
+    const t = line.trim();
+    if (!t || t.startsWith('#') || t === '---') continue;
+    const i = t.indexOf(':');
+    if (i < 1) continue;
+    const name  = t.slice(0, i).trim();
+    const model = t.slice(i + 1).trim() || null;
+    agents.push({ name, model });
   }
-
-  if (fs.existsSync(AMP_AGENTS)) {
-    for (const dir of fs.readdirSync(AMP_AGENTS).sort()) {
-      const skillPath = path.join(AMP_AGENTS, dir, 'SKILL.md');
-      if (!fs.existsSync(skillPath)) continue;
-      const content = fs.readFileSync(skillPath, 'utf8');
-      const fm      = parseFrontmatter(content);
-      const name    = (fm.name || dir).replace(/^sdlc-/, '');
-      if (name === 'orchestrator') continue;          // runner, not an injected agent
-      if (!agents.find(a => a.name === name)) {       // skip duplicates
-        agents.push({ name, preferred_model: fm.preferred_model || null });
-      }
-    }
-  }
-
   return agents;
 }
 
 // ── Output formatter ─────────────────────────────────────────────────────────
 
-function formatBlock(name, modelId, profile) {
+function formatBlock(name, modelId, profile, modelExplicit) {
   const tf    = profile._tpl || {};
   const lines = [
-    `[agent: ${name} | model: ${modelId}]`,
+    `[agent: ${name} | model: ${modelExplicit ? modelId : 'none'}]`,
     `prompt_style: ${profile.prompt_style    || 'plain-numbered'}`,
     `role_assignment: ${profile.role_assignment || 'inline-you-are'}`,
     `chain_of_thought: ${profile.chain_of_thought || 'none'}`,
@@ -134,6 +119,10 @@ function formatBlock(name, modelId, profile) {
 // ── Main ─────────────────────────────────────────────────────────────────────
 
 try {
+  if (!fs.existsSync(AGENTS_FILE)) {
+    console.error(`ERROR: Agent config not found: ${AGENTS_FILE}`);
+    process.exit(1);
+  }
   if (!fs.existsSync(REGISTRY_FILE)) {
     console.error(`ERROR: Registry not found: ${REGISTRY_FILE}`);
     process.exit(1);
@@ -143,7 +132,7 @@ try {
   const agents   = collectAgents();
 
   if (agents.length === 0) {
-    console.error('ERROR: No agent files found in .cursor/agents/ or .agents/skills/');
+    console.error('ERROR: No agents defined in model-profiles/agents.md');
     process.exit(1);
   }
 
@@ -151,8 +140,9 @@ try {
   const summary = [];
 
   for (const agent of agents) {
-    const modelId     = agent.preferred_model || 'default';
-    const profileFile = registry[modelId] || registry['default'];
+    const modelExplicit = !!agent.model;
+    const modelId       = agent.model || 'default';
+    const profileFile   = registry[modelId] || registry['default'];
 
     if (!profileFile) {
       console.error(`ERROR: No profile for '${modelId}' and no default fallback in registry.`);
@@ -160,8 +150,8 @@ try {
     }
 
     const profile = loadProfile(profileFile);
-    blocks.push(formatBlock(agent.name, modelId, profile));
-    summary.push(`${agent.name}=${modelId}`);
+    blocks.push(formatBlock(agent.name, modelId, profile, modelExplicit));
+    summary.push(`${agent.name}=${modelExplicit ? modelId : '(default)'}`);
   }
 
   const timestamp = new Date().toISOString();
