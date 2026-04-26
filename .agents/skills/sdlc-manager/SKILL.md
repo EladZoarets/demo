@@ -1,7 +1,10 @@
 ---
 name: sdlc-manager
+preferred_model: claude-haiku-4-5
 description: "Engineering Manager skill - breaks down plans into atomic sub-tasks and PRs, maps dependencies, and optimizes for velocity. Use when asked to decompose work, create tasks, or scope PRs."
 ---
+
+{MODEL_RULES_INJECTED_BY_ORCHESTRATOR}
 
 # Role: Manager Agent
 

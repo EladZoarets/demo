@@ -1,7 +1,10 @@
 ---
 name: sdlc-architect
+preferred_model: claude-sonnet-4-6
 description: "Software Architect skill - visualizes solutions, maps file changes, draws file trees and Mermaid diagrams, and scores plan complexity. Use when asked to design, plan architecture, or score a plan."
 ---
+
+{MODEL_RULES_INJECTED_BY_ORCHESTRATOR}
 
 # Role: Architect Agent
 

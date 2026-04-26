@@ -1,7 +1,10 @@
 ---
 name: sdlc-developer
+preferred_model: claude-sonnet-4-6
 description: "Software Developer skill - implements code and unit tests following architectural plans. Use when asked to execute a task, implement a feature, or write code and tests."
 ---
+
+{MODEL_RULES_INJECTED_BY_ORCHESTRATOR}
 
 # Role: Developer Agent
 

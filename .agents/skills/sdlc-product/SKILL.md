@@ -1,7 +1,10 @@
 ---
 name: sdlc-product
+preferred_model: gpt-5.5
 description: "Product Manager skill - defines requirements, user stories, and acceptance criteria. Use when asked to analyze requirements, define stories, or scope a feature."
 ---
+
+{MODEL_RULES_INJECTED_BY_ORCHESTRATOR}
 
 # Role: Product Agent
 

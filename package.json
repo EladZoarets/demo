@@ -1,0 +1,13 @@
+{
+  "name": "ai-sdlc",
+  "version": "1.0.0",
+  "description": "AI-SDLC Framework — model-aware multi-agent SDLC pipeline",
+  "private": true,
+  "scripts": {
+    "sdlc:resolve": "node scripts/resolve-profiles.js",
+    "sdlc:resolve:dry": "node scripts/resolve-profiles.js --dry-run"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

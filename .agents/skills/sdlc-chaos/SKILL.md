@@ -1,7 +1,10 @@
 ---
 name: sdlc-chaos
+preferred_model: claude-opus-4-6
 description: "Chaos/QA Agent skill - stress tests solutions, finds edge cases, performs destructive testing and regression audits. Use when asked to chaos test, audit, or stress test code changes."
 ---
+
+{MODEL_RULES_INJECTED_BY_ORCHESTRATOR}
 
 # Role: Chaos Agent (The Breaker)
 
