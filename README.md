@@ -38,9 +38,16 @@ Each agent runs on the model best suited to its role. The Architect and Develope
 
 ### Claude Code
 
-1. Copy this repo into your project (or clone it as a starting point)
+1. Copy these files into your project root:
+   ```
+   .claude/
+   model-profiles/
+   scripts/
+   CLAUDE.md
+   AGENTS.md
+   ```
 2. Update `AGENTS.md` with your stack
-3. Open Claude Code in the repo — `CLAUDE.md` loads automatically
+3. Open Claude Code in the project — `CLAUDE.md` loads automatically
 4. Run:
    ```
    /orchestrate add a user authentication flow
@@ -78,7 +85,7 @@ Before any agent runs, the orchestrator executes:
 node scripts/resolve-profiles.js
 ```
 
-This script reads each agent's `preferred_model`, looks it up in `.cursor/model-profiles/_registry.md`, merges any inherited profile rules, and writes `resolved-context.md`. Each agent then receives prompt rules tailored to the model executing it — XML tags and `<thinking>` blocks for Claude, plain numbered lists for GPT, markdown tables for Gemini.
+This script reads each agent's `preferred_model`, looks it up in `model-profiles/_registry.md`, merges any inherited profile rules, and writes `resolved-context.md`. Each agent then receives prompt rules tailored to the model executing it — XML tags and `<thinking>` blocks for Claude, plain numbered lists for GPT, markdown tables for Gemini.
 
 Output confirms success:
 ```
@@ -126,7 +133,7 @@ agent preferred_model → _registry.md → profile file → resolved-context.md
    ```
    claude-opus-4-7: claude-opus.md
    ```
-2. Add or reuse a profile file in `.cursor/model-profiles/`. If the new model is a variant of an existing one, use `extends`:
+2. Add or reuse a profile file in `model-profiles/`. If the new model is a variant of an existing one, use `extends`:
    ```yaml
    ---
    extends: claude.md
